@@ -47,7 +47,7 @@ public class Bilheteira implements Query {
 
 	@Override
 	public String getInsertQuery() {
-		String query = "INSERT INTO BILHETEIRA (PARTICIPACAO_ID, ORCAMENTO, RECEITA) VALUES (" + 
+		String query = "INSERT INTO BILHETEIRA (PARTICIPACAOGRUPO_ID, ORCAMENTO, RECEITA) VALUES (" + 
 				this.participacaogrupoID + "," + this.orcamento  + "," + this.receita + ")";
 		System.out.println("Query Bilheteira: " + query);
 		return query;

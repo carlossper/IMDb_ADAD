@@ -15,7 +15,7 @@ import interfaces.Query;
 
 public class FinancaCompanhiaPais implements Query {
 	private int paisID;
-	private int datasqlID;
+	private int anoID;
 	
 	private long receita_total;
 	private long orcamento_total;
@@ -23,9 +23,9 @@ public class FinancaCompanhiaPais implements Query {
 	
 	private String nome_companhia;
 
-	public FinancaCompanhiaPais(int paisID, int datasqlID, long receita_total, long orcamento_total, String nome_companhia) {
+	public FinancaCompanhiaPais(int paisID, int anoID, long receita_total, long orcamento_total, String nome_companhia) {
 		this.paisID = paisID;
-		this.datasqlID = datasqlID;
+		this.anoID = anoID;
 		this.receita_total = receita_total;
 		this.orcamento_total = orcamento_total;
 		this.balanco = this.receita_total - this.orcamento_total;
@@ -40,11 +40,11 @@ public class FinancaCompanhiaPais implements Query {
 		this.paisID = paisID;
 	}
 
-	public int getDatasqlID() {
-		return datasqlID;
+	public int getAnoID() {
+		return anoID;
 	}
-	public void setDatasqlID(int datasqlID) {
-		this.datasqlID = datasqlID;
+	public void setAnoID(int anoID) {
+		this.anoID = anoID;
 	}
 
 	public long getReceitaTotal() {
@@ -77,7 +77,7 @@ public class FinancaCompanhiaPais implements Query {
 	@Override
 	public String getInsertQuery() {
 		String query = "INSERT INTO FINANCACOMPANHIAPAIS(DATA_ID,PAIS_ID,NOME_COMPANHIA,RECEITA_TOTAL,ORCAMENTO_TOTAL,BALANCO) VALUES (" +
-				this.paisID + "," + this.datasqlID + "," + this.paisID + "," + "'" + this.nome_companhia + "'" + "," + this.receita_total + "," + this.orcamento_total + "," + this.balanco + ")";
+				this.anoID + "," + this.paisID + "," + "'" + this.nome_companhia + "'" + "," + this.receita_total + "," + this.orcamento_total + "," + this.balanco + ")";
 		System.out.println("Query FinancaCompanhiaPais: " + query);
 		return query;
 	}
@@ -95,7 +95,7 @@ public class FinancaCompanhiaPais implements Query {
 		if (getClass() != obj.getClass())
 			return false;
 		FinancaCompanhiaPais other = (FinancaCompanhiaPais) obj;
-		if (datasqlID != other.datasqlID)
+		if (anoID != other.anoID)
 			return false;
 		if (nome_companhia == null) {
 			if (other.nome_companhia != null)

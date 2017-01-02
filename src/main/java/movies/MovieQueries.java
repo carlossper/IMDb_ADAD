@@ -17,13 +17,14 @@ import com.uwetrottmann.tmdb2.entities.ProductionCompany;
 import com.uwetrottmann.tmdb2.entities.ProductionCountry;
 import com.uwetrottmann.tmdb2.services.MoviesService;
 
+import dimensoes.Ano;
 import dimensoes.DataSQL;
 import dimensoes.Filme;
 import dimensoes.Genero;
 import dimensoes.Pais;
 import dimensoes.Participacao;
 import dimensoes.ParticipacaoGrupo;
-import dimensoes.Profissional;
+import factos.AcumuladoProfissional;
 import factos.Bilheteira;
 import factos.FinancaCompanhiaPais;
 import factos.FinancaGeneroPais;
@@ -35,7 +36,6 @@ public class MovieQueries {
 	private static MoviesService moviesService;
 	
 	private static List<Filme> filmes = new ArrayList<Filme>();
-	private static List<Profissional> profissionais = new ArrayList<Profissional>();
 	private static List<Pais> paises = new ArrayList<Pais>();
 	private static List<Genero> generos = new ArrayList<Genero>();
 	
@@ -51,6 +51,10 @@ public class MovieQueries {
 	private static List<FinancaCompanhiaPais> fcp = new ArrayList<FinancaCompanhiaPais>();
 	private static List<FinancaGeneroPais> fgp = new ArrayList<FinancaGeneroPais>();
 	
+	private static List<Ano> anos = new ArrayList<Ano>();
+	
+	private static List<AcumuladoProfissional> acumulados = new ArrayList<AcumuladoProfissional>();
+	
 	private static final int NUMBER_OF_PAGES = 1;
 	
 	public static void main(String[] args) throws Exception {	
@@ -61,10 +65,7 @@ public class MovieQueries {
 		
 		for(Filme filme : filmes) 
 			filme.getInsertQuery();
-		
-		for(Profissional prof : profissionais)
-			prof.getInsertQuery();
-		
+
 		for(Pais pais : paises) 
 			pais.getInsertQuery();
 		
@@ -89,7 +90,13 @@ public class MovieQueries {
 		for(FinancaGeneroPais fgpObject : fgp)
 			fgpObject.getInsertQuery();
 		
-		saveDataToOracle();
+		for(Ano ano : anos) 
+			ano.getInsertQuery();
+		
+		for(AcumuladoProfissional acumulado : acumulados) 
+			acumulado.getInsertQuery();
+		
+		//saveDataToOracle();
 	}
 
 	private static void saveDataToOracle() throws Exception, SQLException {
@@ -99,9 +106,6 @@ public class MovieQueries {
 		
 		for(Filme filme : filmes)
 			oracleConnection.executeQuery(filme.getInsertQuery());
-		
-		for(Profissional prof : profissionais)
-			oracleConnection.executeQuery(prof.getInsertQuery());
 		
 		for(Pais pais : paises) 
 			oracleConnection.executeQuery(pais.getInsertQuery());
@@ -139,8 +143,7 @@ public class MovieQueries {
 		List<ProductionCountry> countries;
 		List<Genre> genres;
 		List<ProductionCompany> companies;
-		
-		Profissional profissional;
+	
 		Pais pais;
 		Genero genero;
 		
@@ -150,10 +153,14 @@ public class MovieQueries {
 		Bilheteira bilheteira;
 		
 		DataSQL data;
+		Ano ano_;
+		
 		Ratings rating;
 		
 		FinancaCompanhiaPais fcpObject;
 		FinancaGeneroPais fgpObject;
+		
+		AcumuladoProfissional acumulado;
 		
 		for(Movie movie : movies) {
 			castList = new ArrayList<CastMember>();
@@ -206,6 +213,22 @@ public class MovieQueries {
         		datas.add(data);
         	else 
         		found = false;
+        	
+        	ano_ = new Ano(ano);
+        	int anoID = ano_.getID();
+        	for(int i = 0; i<anos.size(); i++) {
+        		if(anos.get(i).equals(ano_)) {
+        			Ano.anoID--;
+        			anoID = anos.get(i).getID();
+        			found = true;
+        			break;
+        		}
+        	}
+        	
+        	if(!found) 
+        		anos.add(ano_);
+        	else 
+        		found = false;
 			
 			System.out.println("Release date: " + dataString);
 			
@@ -221,15 +244,7 @@ public class MovieQueries {
 	        
 	        castList = credits.cast;
 	        
-	        for(CastMember person : castList) {	        	
-	        	profissional = new Profissional(person.name);
-	        	if(!profissionais.contains(profissional))
-	        		profissionais.add(profissional);
-	        	else
-	        		Profissional.profissionalID--;
-	        	
-	        	found = false;
-	        	
+	        for(CastMember person : castList) {	        	      	
 	        	participacao = new Participacao(person.name);
 	        	int partID = participacao.getID();
 	        	for(int i = 0; i<participacoes.size(); i++) {
@@ -267,19 +282,25 @@ public class MovieQueries {
 	        	if(!bilheteiras.contains(bilheteira))
 	        		bilheteiras.add(bilheteira);
 	        	
+	        	acumulado = new AcumuladoProfissional(anoID, person.name, orcamento, receitas);
+            	for(int i = 0; i<acumulados.size(); i++) {
+            		if(acumulados.get(i).equals(acumulado)) {
+            			acumulados.get(i).updateFinanca(orcamento,receitas);
+            			found = true;
+            			break;
+            		}
+            	}
+            	
+            	if(!found) 
+            		acumulados.add(acumulado);
+            	else 
+            		found = false;
+	        	
 	        }
 	        
 	        crewList = credits.crew;
 	        
 	        for(CrewMember person : crewList) {	        	
-	        	profissional = new Profissional(person.name);
-	        	if(!profissionais.contains(profissional)) 
-	        		profissionais.add(profissional);
-	        	else 
-	        		Profissional.profissionalID--;
-	        	
-	        	found = false;
-	        	
 	        	participacao = new Participacao(person.name);
 	        	int partID = participacao.getID();
 	        	for(int i = 0; i<participacoes.size(); i++) {
@@ -316,6 +337,20 @@ public class MovieQueries {
 	        	
 	        	if(!bilheteiras.contains(bilheteira))
 	        		bilheteiras.add(bilheteira);
+	        	
+	        	acumulado = new AcumuladoProfissional(anoID, person.name, orcamento, receitas);
+            	for(int i = 0; i<acumulados.size(); i++) {
+            		if(acumulados.get(i).equals(acumulado)) {
+            			acumulados.get(i).updateFinanca(orcamento,receitas);
+            			found = true;
+            			break;
+            		}
+            	}
+            	
+            	if(!found) 
+            		acumulados.add(acumulado);
+            	else 
+            		found = false;
 	        }
 	        
 	        countries = mov.production_countries;
@@ -341,11 +376,22 @@ public class MovieQueries {
 	        	
 	        	found = false;
 	        	
-	        	fgpObject = new FinancaGeneroPais(generoID,dataID,filme.getID(),mov.budget,mov.revenue);
+	        	fgpObject = new FinancaGeneroPais(generoID,anoID,filme.getID(),mov.budget,mov.revenue);
 
-	        	if(!fgp.contains(fgpObject))
+	        	for(int i=0; i<fgp.size(); i++) {
+	        		if(fgp.get(i).equals(fgpObject)) {
+	        			fgp.get(i).updateFinanca(orcamento,receitas);
+	        			found = true;
+	        			break;
+	        		}
+	        	}
+	        	
+	        	if(!found)
 	        		fgp.add(fgpObject);
+	        	else
+	        		found = false;
 	        }
+	        
 	        
 	        for(ProductionCountry country : countries) {
 	        	pais = new Pais(country.name);
@@ -374,10 +420,20 @@ public class MovieQueries {
 		        companies = mov.production_companies;
 		        
 		        for(ProductionCompany company : companies) {
-		        	fcpObject = new FinancaCompanhiaPais(paisID,dataID,mov.budget,mov.revenue,company.name);
+		        	fcpObject = new FinancaCompanhiaPais(paisID,anoID,mov.budget,mov.revenue,company.name);
 
-		        	if(!fcp.contains(fcpObject))
+		        	for(int i=0; i<fcp.size(); i++) {
+		        		if(fcp.get(i).equals(fcpObject)) {
+		        			fcp.get(i).updateFinanca(orcamento,receitas);
+		        			found = true;
+		        			break;
+		        		}
+		        	}
+		        	
+		        	if(!found)
 		        		fcp.add(fcpObject);
+		        	else
+		        		found = false;
 		        }
 	        }
 	

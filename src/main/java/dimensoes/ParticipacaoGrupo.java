@@ -1,6 +1,5 @@
 package dimensoes;
 
-import factos.Bilheteira;
 import interfaces.Query;
 
 public class ParticipacaoGrupo implements Query {

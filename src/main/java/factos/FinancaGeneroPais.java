@@ -4,16 +4,16 @@ import interfaces.Query;
 
 public class FinancaGeneroPais implements Query {
 	private int generoID;
-	private int datasqlID;
+	private int anoID;
 	private int paisID;
 	
 	private long receita_total;
 	private long orcamento_total;
 	private long balanco;
 	
-	public FinancaGeneroPais(int generoID, int datasqlID, int paisID, long receita_total, long orcamento_total) {
+	public FinancaGeneroPais(int generoID, int anoID, int paisID, long receita_total, long orcamento_total) {
 		this.generoID = generoID;
-		this.datasqlID = datasqlID;
+		this.anoID = anoID;
 		this.paisID = paisID;
 		this.receita_total = receita_total;
 		this.orcamento_total = orcamento_total;
@@ -27,11 +27,11 @@ public class FinancaGeneroPais implements Query {
 		this.generoID = generoID;
 	}
 
-	public int getDatasqlID() {
-		return datasqlID;
+	public int getAnoID() {
+		return anoID;
 	}
-	public void setDatasqlID(int datasqlID) {
-		this.datasqlID = datasqlID;
+	public void setAnoID(int anoID) {
+		this.anoID = anoID;
 	}
 
 	public long getReceitaTotal() {
@@ -64,8 +64,8 @@ public class FinancaGeneroPais implements Query {
 
 	@Override
 	public String getInsertQuery() {
-		String query = "INSERT INTO FINANCAGENEROPAIS(GENERO_ID,DATA_ID,PAIS_ID,RECEITA_TOTAL,ORCAMENTO_TOTAL,BALANCO) VALUES (" +
-				this.generoID + "," + this.datasqlID + "," + this.paisID + "," + this.receita_total + "," + this.orcamento_total + "," + this.balanco + ")";
+		String query = "INSERT INTO FINANCAGENEROPAIS(GENERO_ID,ANO_ID,PAIS_ID,RECEITA_TOTAL,ORCAMENTO_TOTAL,BALANCO) VALUES (" +
+				this.generoID + "," + this.anoID + "," + this.paisID + "," + this.receita_total + "," + this.orcamento_total + "," + this.balanco + ")";
 		System.out.println("Query FinancaGeneroPais: " + query);
 		return query;
 	}
@@ -83,7 +83,7 @@ public class FinancaGeneroPais implements Query {
 		if (getClass() != obj.getClass())
 			return false;
 		FinancaGeneroPais other = (FinancaGeneroPais) obj;
-		if (datasqlID != other.datasqlID)
+		if (anoID != other.anoID)
 			return false;
 		if (generoID != other.generoID)
 			return false;
