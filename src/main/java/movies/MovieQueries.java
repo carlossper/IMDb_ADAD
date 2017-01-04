@@ -63,7 +63,7 @@ public class MovieQueries {
 		
 		getDataFromTMDBApi(); 
 		
-		for(Ano ano : anos) 
+		/*for(Ano ano : anos) 
 			ano.getInsertQuery();
 		
 		for(DataSQL data : datas)
@@ -82,7 +82,7 @@ public class MovieQueries {
 			part.getInsertQuery();
 		
 		for(Bilheteira bilh : bilheteiras) 
-			bilh.getInsertQuery();
+			bilh.getInsertQuery(); 
 		
 		for(ParticipacaoGrupo partGrupo : partsGrupo) 
 			partGrupo.getInsertQuery();
@@ -98,7 +98,7 @@ public class MovieQueries {
 
 		
 		for(AcumuladoProfissional acumulado : acumulados) 
-			acumulado.getInsertQuery();
+			acumulado.getInsertQuery(); */
 		
 		saveDataToOracle();
 	}
@@ -106,39 +106,127 @@ public class MovieQueries {
 	private static void saveDataToOracle() throws Exception, SQLException {
 		oracleConnection = new OracleConnection();
 		
+		int i = 1;
 		// execute queries
-		/*for(Ano ano : anos) 
+		/*for(Ano ano : anos) {
 			oracleConnection.executeQuery(ano.getInsertQuery());
+			i++;
+			if(i==200) {
+				oracleConnection.closeConnection();
+				oracleConnection = new OracleConnection();
+				i = 1;
+			}
+		}
 		
-		for(DataSQL data : datas)
-			oracleConnection.executeQuery(data.getInsertQuery());*/
+		for(DataSQL data : datas) {
+			oracleConnection.executeQuery(data.getInsertQuery());
+			i++;
+			if(i==200) {
+				oracleConnection.closeConnection();
+				oracleConnection = new OracleConnection();
+				i = 1;
+			}
+		}
 		
-		/*for(Filme filme : filmes)
+		for(Filme filme : filmes) {
 			oracleConnection.executeQuery(filme.getInsertQuery());
+			i++;
+			if(i==200) {
+				oracleConnection.closeConnection();
+				oracleConnection = new OracleConnection();
+				i = 1;
+			}
+		}
 		
-		for(Pais pais : paises) 
+		for(Pais pais : paises) {
 			oracleConnection.executeQuery(pais.getInsertQuery());
+			i++;
+			if(i==200) {
+				oracleConnection.closeConnection();
+				oracleConnection = new OracleConnection();
+				i = 1;
+			}
+		}
 		
-		for(Genero genero : generos) 
-			oracleConnection.executeQuery(genero.getInsertQuery());*/
-		
-		for(Participacao part : participacoes)
+		for(Genero genero : generos) {
+			oracleConnection.executeQuery(genero.getInsertQuery());
+			i++;
+			if(i==200) {
+				oracleConnection.closeConnection();
+				oracleConnection = new OracleConnection();
+				i = 1;
+			}
+		}
+
+		for(Participacao part : participacoes) {
 			oracleConnection.executeQuery(part.getInsertQuery());
+			i++;
+			if(i==200) {
+				oracleConnection.closeConnection();
+				oracleConnection = new OracleConnection();
+				i = 1;
+			}
+		}
 		
-		for(Bilheteira bilh : bilheteiras) 
+		for(Bilheteira bilh : bilheteiras) {
 			oracleConnection.executeQuery(bilh.getInsertQuery());
-		
-		/*for(ParticipacaoGrupo partGrupo : partsGrupo) 
+			i++;
+			if(i==200) {
+				oracleConnection.closeConnection();
+				oracleConnection = new OracleConnection();
+				i = 1;
+			}
+		}
+	
+		for(ParticipacaoGrupo partGrupo : partsGrupo) {
 			oracleConnection.executeQuery(partGrupo.getInsertQuery());
+			i++;
+			if(i==200) {
+				oracleConnection.closeConnection();
+				oracleConnection = new OracleConnection();
+				i = 1;
+			}
+		}
 		
-		for(Ratings rating : ratings) 
+		for(Ratings rating : ratings) {
 			oracleConnection.executeQuery(rating.getInsertQuery());
+			i++;
+			if(i==200) {
+				oracleConnection.closeConnection();
+				oracleConnection = new OracleConnection();
+				i = 1;
+			}
+		} 
 		
-		for(FinancaCompanhiaPais fcpObject : fcp) 
+		for(FinancaCompanhiaPais fcpObject : fcp) {
 			oracleConnection.executeQuery(fcpObject.getInsertQuery());
+			i++;
+			if(i==200) {
+				oracleConnection.closeConnection();
+				oracleConnection = new OracleConnection();
+				i = 1;
+			}
+		}
 		
-		for(FinancaGeneroPais fgpObject : fgp)
-			oracleConnection.executeQuery(fgpObject.getInsertQuery());	*/	
+		for(FinancaGeneroPais fgpObject : fgp) {
+			oracleConnection.executeQuery(fgpObject.getInsertQuery());
+			i++;
+			if(i==200) {
+				oracleConnection.closeConnection();
+				oracleConnection = new OracleConnection();
+				i = 1;
+			}
+		} */
+		
+		for(AcumuladoProfissional acumulado : acumulados) {
+			oracleConnection.executeQuery(acumulado.getInsertQuery());
+			i++;
+			if(i==200) {
+				oracleConnection.closeConnection();
+				oracleConnection = new OracleConnection();
+				i = 1;
+			}
+		}
 		
 		oracleConnection.closeConnection();
 	}
@@ -351,67 +439,60 @@ public class MovieQueries {
 	        	
 	        	found = false;
 	        	
-	        	fgpObject = new FinancaGeneroPais(generoID,anoID,filme.getID(),mov.budget,mov.revenue);
+				 for(ProductionCountry country : countries) {	        	    	
+				   	pais = new Pais(country.name);
+					paisID = pais.getID();
+					for(int i=0; i<paises.size(); i++) {
+						if(paises.get(i).equals(pais)) {
+							Pais.paisID--;
+							paisID = paises.get(i).getID();
+							found = true;
+							break;
+						}
+					}
+					
+					if(!found)
+						paises.add(pais);
+					
+					found = false;
+					
+		        	fgpObject = new FinancaGeneroPais(generoID,anoID,paisID,mov.budget,mov.revenue);
 
-	        	for(int i=0; i<fgp.size(); i++) {
-	        		if(fgp.get(i).equals(fgpObject)) {
-	        			fgp.get(i).updateFinanca(orcamento,receitas);
-	        			found = true;
-	        			break;
-	        		}
-	        	}
-	        	
-	        	if(!found)
-	        		fgp.add(fgpObject);
-	        	else
-	        		found = false;
-	        }
-	        
-	        
-	        for(ProductionCountry country : countries) {
-	        	pais = new Pais(country.name);
-	        	
-	        	if(!paises.contains(pais))
-	        		paises.add(pais);
-	        	else
-	        		Pais.paisID--;
-	        	
-	           	pais = new Pais(country.name);
-	        	paisID = pais.getID();
-	        	for(int i=0; i<paises.size(); i++) {
-	        		if(paises.get(i).equals(pais)) {
-	        			Pais.paisID--;
-	        			paisID = paises.get(i).getID();
-	        			found = true;
-	        			break;
-	        		}
-	        	}
-	        	
-	        	if(!found)
-	        		paises.add(pais);
-	        	
-	        	found = false;
-	        		
-		        companies = mov.production_companies;
-		        
-		        for(ProductionCompany company : companies) {
-		        	fcpObject = new FinancaCompanhiaPais(paisID,anoID,mov.budget,mov.revenue,company.name);
-
-		        	for(int i=0; i<fcp.size(); i++) {
-		        		if(fcp.get(i).equals(fcpObject)) {
-		        			fcp.get(i).updateFinanca(orcamento,receitas);
+		        	for(int i=0; i<fgp.size(); i++) {
+		        		if(fgp.get(i).equals(fgpObject)) {
+		        			fgp.get(i).updateFinanca(orcamento,receitas);
 		        			found = true;
 		        			break;
 		        		}
 		        	}
 		        	
 		        	if(!found)
-		        		fcp.add(fcpObject);
+		        		fgp.add(fgpObject);
 		        	else
 		        		found = false;
-		        }
+						
+				    companies = mov.production_companies;
+				    
+				    for(ProductionCompany company : companies) {
+				    	fcpObject = new FinancaCompanhiaPais(paisID,anoID,mov.budget,mov.revenue,company.name);
+				
+				    	for(int i=0; i<fcp.size(); i++) {
+				    		if(fcp.get(i).equals(fcpObject)) {
+				    			fcp.get(i).updateFinanca(orcamento,receitas);
+				    			found = true;
+				    			break;
+				    		}
+				    	}
+				    	
+				    	if(!found)
+				    		fcp.add(fcpObject);
+				    	else
+				    		found = false;
+				    }
+				}
 	        }
-        	bilheteira = new Bilheteira(participacaogrupo_id, orcamento, receitas);
+	        
+        	bilheteira = new Bilheteira(participacaogrupo_id, filme.getID(), orcamento, receitas);
         	
         	bilheteiras.add(bilheteira);
     		participacaogrupo_id++;

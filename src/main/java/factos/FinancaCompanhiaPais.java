@@ -76,7 +76,7 @@ public class FinancaCompanhiaPais implements Query {
 	
 	@Override
 	public String getInsertQuery() {
-		String query = "INSERT INTO FINANCACOMPANHIAPAIS(DATA_ID,PAIS_ID,NOME_COMPANHIA,RECEITA_TOTAL,ORCAMENTO_TOTAL,BALANCO) VALUES (" +
+		String query = "INSERT INTO FINANCACOMPANHIAPAIS(ANO_ID,PAIS_ID,NOME_COMPANHIA,RECEITA_TOTAL,ORCAMENTO_TOTAL,BALANCO) VALUES (" +
 				this.anoID + "," + this.paisID + "," + "'" + this.nome_companhia + "'" + "," + this.receita_total + "," + this.orcamento_total + "," + this.balanco + ")";
 		System.out.println("Query FinancaCompanhiaPais: " + query);
 		return query;

@@ -13,12 +13,14 @@ import interfaces.Query;
 
 public class Bilheteira implements Query {
 	private int participacaogrupoID;
+	private int filmeID;
 	
 	private long orcamento;
 	private long receita;
 	
-	public Bilheteira(int participacaogrupoID, long orcamento, long receita) {
+	public Bilheteira(int participacaogrupoID, int filmeID, long orcamento, long receita) {
 		this.participacaogrupoID = participacaogrupoID;
+		this.filmeID = filmeID;
 		
 		this.orcamento = orcamento;
 		this.receita = receita;
@@ -47,8 +49,8 @@ public class Bilheteira implements Query {
 
 	@Override
 	public String getInsertQuery() {
-		String query = "INSERT INTO BILHETEIRA (PARTICIPACAOGRUPO_ID, ORCAMENTO, RECEITA) VALUES (" + 
-				this.participacaogrupoID + "," + this.orcamento  + "," + this.receita + ")";
+		String query = "INSERT INTO BILHETEIRA (PARTICIPACAOGRUPO_ID, FILME_ID, ORCAMENTO, RECEITA) VALUES (" + 
+				this.participacaogrupoID + "," + this.filmeID + "," + this.orcamento  + "," + this.receita + ")";
 		System.out.println("Query Bilheteira: " + query);
 		return query;
 	}
