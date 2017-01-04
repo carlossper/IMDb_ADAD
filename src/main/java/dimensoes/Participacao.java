@@ -16,9 +16,11 @@ public class Participacao implements Query {
 	private final int id;
 
 	private String nome_profissional;
+	private String funcao;
 	
-	public Participacao(String nome_profissional) {
-		this.nome_profissional = nome_profissional;
+	public Participacao(String nome_profissional, String funcao) {
+		this.nome_profissional = nome_profissional.replace("'", " ");
+		this.funcao = funcao;
 		
 		id = participacaoID++;
 	}
@@ -36,14 +38,14 @@ public class Participacao implements Query {
 	
 	@Override
 	public String getInsertQuery() {
-		String query = "INSERT INTO PARTICIPACAO (PARTICIPACAO_ID, NOME_PROFISSIONAL) VALUES (" +
-				this.id  + "," + "'" + this.nome_profissional + "'" + ")";
+		String query = "INSERT INTO PARTICIPACAO (PARTICIPACAO_ID, NOME_PROFISSIONAL, FUNCAO) VALUES (" +
+				this.id  + "," + "'" + this.nome_profissional + "'" + "," + "'" + this.funcao + "'" + ")";
 		System.out.println("Query Participacao: " + query);
 		return query;
 	}
 
 	public String deleteAllFromTableQuery() {
-		return "DELETE * FROM " + Participacao.class.getName();
+		return "TRUNCATE TABLE " + Participacao.class.getName();
 	}
 
 	@Override
@@ -55,6 +57,11 @@ public class Participacao implements Query {
 		if (getClass() != obj.getClass())
 			return false;
 		Participacao other = (Participacao) obj;
+		if (funcao == null) {
+			if (other.funcao != null)
+				return false;
+		} else if (!funcao.equals(other.funcao))
+			return false;
 		if (nome_profissional == null) {
 			if (other.nome_profissional != null)
 				return false;

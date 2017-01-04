@@ -1,5 +1,6 @@
 package factos;
 
+import dimensoes.Ano;
 import interfaces.Query;
 
 public class AcumuladoProfissional implements Query {
@@ -11,7 +12,7 @@ public class AcumuladoProfissional implements Query {
 	
 	public AcumuladoProfissional(int anoID, String nome_profissional, long orcamento, long receita) {
 		this.anoID = anoID;
-		this.nome_profissional = nome_profissional;
+		this.nome_profissional = nome_profissional.replace("'"," ");
 		this.receita_total = receita;
 		this.orcamento_total = orcamento;
 		this.balanco = this.receita_total - this.orcamento_total;
@@ -94,6 +95,10 @@ public class AcumuladoProfissional implements Query {
 				this.anoID + "," + "'" + this.nome_profissional + "'" + "," + this.receita_total + "," + this.orcamento_total + "," + this.balanco + "," + this.nr_filmes + "," + this.media_balancofilmes + ")";
 		System.out.println("Query AcumuladoProfissional: " + query);
 		return query;
+	}
+	
+	public static String deleteAllFromTableQuery() {
+		return "TRUNCATE TABLE " + AcumuladoProfissional.class.getName();
 	}
 
 	@Override

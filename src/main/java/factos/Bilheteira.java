@@ -54,7 +54,7 @@ public class Bilheteira implements Query {
 	}
 	
 	public String deleteAllFromTableQuery() {
-		return "DELETE * FROM " + Bilheteira.class.getName();
+		return "TRUNCATE TABLE " + Bilheteira.class.getName();
 	}
 	
 

@@ -30,7 +30,7 @@ public class Filme implements Query {
 	private int receitas;
 	
 	public Filme(String nome, int duracao, int ano, String estado, double popularidade, int orçamento, int receitas) {
-		this.nome = nome;
+		this.nome = nome.replace("'","");
 		this.duracao = duracao;
 		this.ano = ano;
 		this.estado = estado;
@@ -97,6 +97,6 @@ public class Filme implements Query {
 	}
 
 	public static String deleteAllFromTableQuery() {
-		return "DELETE * FROM " + Filme.class.getName();
+		return "TRUNCATE TABLE " + Filme.class.getName();
 	}
 }

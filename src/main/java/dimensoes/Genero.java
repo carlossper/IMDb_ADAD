@@ -16,7 +16,7 @@ public class Genero implements Query {
 	private String nome;
 	
 	public Genero(String nome) {
-		this.nome = nome;
+		this.nome = nome.replace("'"," ");
 		
 		this.id = generoID++;
 	}
@@ -41,7 +41,7 @@ public class Genero implements Query {
 	}
 	
 	public static String deleteAllFromTableQuery() {
-		return "DELETE * FROM " + Genero.class.getName();
+		return "TRUNCATE TABLE " + Genero.class.getName();
 	}
 	
 	@Override

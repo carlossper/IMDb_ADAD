@@ -63,6 +63,6 @@ public class Ratings implements Query {
 	}
 	
 	public static String deleteAllFromTableQuery() {
-		return "DELETE * FROM " + Ratings.class.getName();
+		return "TRUNCATE TABLE " + Ratings.class.getName();
 	}
 }

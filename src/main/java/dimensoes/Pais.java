@@ -16,7 +16,7 @@ public class Pais implements Query {
 	private String nome;
 	
 	public Pais(String nome) {
-		this.nome = nome;
+		this.nome = nome.replace("'", " ");
 		
 		this.id = paisID++;
 	}
@@ -48,7 +48,7 @@ public class Pais implements Query {
 	}
 	
 	public static String deleteAllFromTableQuery() {
-		return "DELETE * FROM " + Pais.class.getName();
+		return "TRUNCATE TABLE " + Pais.class.getName();
 	}
 
 	@Override

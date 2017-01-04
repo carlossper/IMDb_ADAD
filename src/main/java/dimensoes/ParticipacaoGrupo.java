@@ -3,17 +3,13 @@ package dimensoes;
 import interfaces.Query;
 
 public class ParticipacaoGrupo implements Query {
-	public static int participacaoGrupoID = 1;
 	private final int id;
 	
 	private int participacaoID;
-	private String funcao;
 	
-	public ParticipacaoGrupo(int participacaoID, String funcao) {
+	public ParticipacaoGrupo(int id, int participacaoID) {
 		this.setParticipacaoID(participacaoID);
-		this.funcao = funcao;
-		
-		id = participacaoGrupoID++;
+		this.id = id;
 	}
 	
 	public int getParticipacaoID() {
@@ -29,14 +25,14 @@ public class ParticipacaoGrupo implements Query {
 
 	@Override
 	public String getInsertQuery() {
-		String query = "INSERT INTO PARTICIPACAOGRUPO(PARTICIPACAOGRUPO_ID, PARTICIPACAO_ID, FUNCAO) VALUES (" +
-				this.id + "," + this.participacaoID + "," + "'" + this.funcao + "'" + ")";
+		String query = "INSERT INTO PARTICIPACAOGRUPO(PARTICIPACAOGRUPO_ID, PARTICIPACAO_ID) VALUES (" +
+				this.id + "," + this.participacaoID + ")";
 		System.out.println(query);
 		return query;
 	}
 	
 	public String deleteAllFromTableQuery() {
-		return "DELETE * FROM " + ParticipacaoGrupo.class.getName();
+		return "TRUNCATE TABLE " + ParticipacaoGrupo.class.getName();
 	}
 
 	@Override
@@ -48,14 +44,11 @@ public class ParticipacaoGrupo implements Query {
 		if (getClass() != obj.getClass())
 			return false;
 		ParticipacaoGrupo other = (ParticipacaoGrupo) obj;
-		if (funcao == null) {
-			if (other.funcao != null)
-				return false;
-		} else if (!funcao.equals(other.funcao))
+		if (id != other.id)
 			return false;
 		if (participacaoID != other.participacaoID)
 			return false;
 		return true;
 	}
-
+	
 }

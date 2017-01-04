@@ -20,7 +20,7 @@ public class Profissional implements Query {
 	}
 	
 	public Profissional(String nome) {
-		this.nome = nome;
+		this.nome = nome.replace("'", " ");
 		
 		this.id = profissionalID++;
 	}
@@ -57,7 +57,7 @@ public class Profissional implements Query {
 	}
 
 	public String deleteAllFromTableQuery() {
-		return "DELETE * FROM " + Profissional.class.getName();
+		return "TRUNCATE TABLE " + Profissional.class.getName();
 	}
 	
 	@Override

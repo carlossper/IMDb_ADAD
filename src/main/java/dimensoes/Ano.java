@@ -36,7 +36,7 @@ public class Ano implements Query {
 	}
 	
 	public static String deleteAllFromTableQuery() {
-		return "DELETE * FROM " + Ano.class.getName();
+		return "TRUNCATE TABLE " + Ano.class.getName();
 	}
 
 	@Override

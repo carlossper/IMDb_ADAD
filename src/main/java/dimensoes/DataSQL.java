@@ -77,14 +77,14 @@ public class DataSQL implements Query {
 	
 	@Override
 	public String getInsertQuery() {
-		String query = "INSERT INTO DATA (DATA_ID, DIA, MES, ANO, DATASQL, DIA_SEMANA) VALUES (" +
-				this.id + "," + this.dia + "," + "'" + this.nomeMes + "," + "," + this.ano + "," + "null" + "," + "'" + this.diaSemana + "'" + ")";
+		String query = "INSERT INTO DATASQL (DATA_ID, DIA, MES, ANO, DATASQL, DIA_SEMANA) VALUES (" +
+				this.id + "," + this.dia + "," + "'" + this.nomeMes + "'" + "," + this.ano + "," + "null" + "," + "'" + this.diaSemana + "'" + ")";
 		System.out.println("Query DataSQL: " + query);
 		return query;
 	}
 
 	public static String deleteAllFromTableQuery() {
-		return "DELETE * FROM " + DataSQL.class.getName();
+		return "TRUNCATE TABLE " + DataSQL.class.getName();
 	}
 
 	@Override

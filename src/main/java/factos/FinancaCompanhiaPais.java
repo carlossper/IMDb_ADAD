@@ -30,7 +30,7 @@ public class FinancaCompanhiaPais implements Query {
 		this.orcamento_total = orcamento_total;
 		this.balanco = this.receita_total - this.orcamento_total;
 		
-		this.nome_companhia = nome_companhia;
+		this.nome_companhia = nome_companhia.replace("'", " ");
 	}
 	
 	public int getPaisID() {
@@ -83,7 +83,7 @@ public class FinancaCompanhiaPais implements Query {
 	}
 
 	public static String deleteAllFromTableQuery() {
-		return "DELETE * FROM " + FinancaCompanhiaPais.class.getName();
+		return "TRUNCATE TABLE " + FinancaCompanhiaPais.class.getName();
 	}
 	
 	@Override

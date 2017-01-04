@@ -71,7 +71,7 @@ public class FinancaGeneroPais implements Query {
 	}
 
 	public static String deleteAllFromTableQuery() {
-		return "DELETE * FROM " + FinancaGeneroPais.class.getName();
+		return "TRUNCATE TABLE " + FinancaGeneroPais.class.getName();
 	}
 
 	@Override

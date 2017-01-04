@@ -63,6 +63,12 @@ public class MovieQueries {
 		
 		getDataFromTMDBApi(); 
 		
+		for(Ano ano : anos) 
+			ano.getInsertQuery();
+		
+		for(DataSQL data : datas)
+			data.getInsertQuery();
+		
 		for(Filme filme : filmes) 
 			filme.getInsertQuery();
 
@@ -75,12 +81,12 @@ public class MovieQueries {
 		for(Participacao part : participacoes)
 			part.getInsertQuery();
 		
-		for(ParticipacaoGrupo partGrupo : partsGrupo) 
-			partGrupo.getInsertQuery();
-		
 		for(Bilheteira bilh : bilheteiras) 
 			bilh.getInsertQuery();
 		
+		for(ParticipacaoGrupo partGrupo : partsGrupo) 
+			partGrupo.getInsertQuery();
+
 		for(Ratings rating : ratings) 
 			rating.getInsertQuery();
 		
@@ -89,38 +95,41 @@ public class MovieQueries {
 		
 		for(FinancaGeneroPais fgpObject : fgp)
 			fgpObject.getInsertQuery();
-		
-		for(Ano ano : anos) 
-			ano.getInsertQuery();
+
 		
 		for(AcumuladoProfissional acumulado : acumulados) 
 			acumulado.getInsertQuery();
 		
-		//saveDataToOracle();
+		saveDataToOracle();
 	}
 
 	private static void saveDataToOracle() throws Exception, SQLException {
 		oracleConnection = new OracleConnection();
 		
 		// execute queries
+		/*for(Ano ano : anos) 
+			oracleConnection.executeQuery(ano.getInsertQuery());
 		
-		for(Filme filme : filmes)
+		for(DataSQL data : datas)
+			oracleConnection.executeQuery(data.getInsertQuery());*/
+		
+		/*for(Filme filme : filmes)
 			oracleConnection.executeQuery(filme.getInsertQuery());
 		
 		for(Pais pais : paises) 
 			oracleConnection.executeQuery(pais.getInsertQuery());
 		
 		for(Genero genero : generos) 
-			oracleConnection.executeQuery(genero.getInsertQuery());
+			oracleConnection.executeQuery(genero.getInsertQuery());*/
 		
 		for(Participacao part : participacoes)
 			oracleConnection.executeQuery(part.getInsertQuery());
 		
-		for(ParticipacaoGrupo partGrupo : partsGrupo) 
-			oracleConnection.executeQuery(partGrupo.getInsertQuery());
-		
 		for(Bilheteira bilh : bilheteiras) 
 			oracleConnection.executeQuery(bilh.getInsertQuery());
+		
+		/*for(ParticipacaoGrupo partGrupo : partsGrupo) 
+			oracleConnection.executeQuery(partGrupo.getInsertQuery());
 		
 		for(Ratings rating : ratings) 
 			oracleConnection.executeQuery(rating.getInsertQuery());
@@ -129,7 +138,7 @@ public class MovieQueries {
 			oracleConnection.executeQuery(fcpObject.getInsertQuery());
 		
 		for(FinancaGeneroPais fgpObject : fgp)
-			oracleConnection.executeQuery(fgpObject.getInsertQuery());		
+			oracleConnection.executeQuery(fgpObject.getInsertQuery());	*/	
 		
 		oracleConnection.closeConnection();
 	}
@@ -161,6 +170,8 @@ public class MovieQueries {
 		FinancaGeneroPais fgpObject;
 		
 		AcumuladoProfissional acumulado;
+		
+		int participacaogrupo_id = 1;
 		
 		for(Movie movie : movies) {
 			castList = new ArrayList<CastMember>();
@@ -231,6 +242,7 @@ public class MovieQueries {
         		found = false;
 			
 			System.out.println("Release date: " + dataString);
+			System.out.println("Duracao: " + duracao);
 			
 			filme = new Filme(nome,duracao,ano,estado,popularidade,orcamento,receitas);
 			//filme.getInsertQuery();
@@ -245,7 +257,7 @@ public class MovieQueries {
 	        castList = credits.cast;
 	        
 	        for(CastMember person : castList) {	        	      	
-	        	participacao = new Participacao(person.name);
+	        	participacao = new Participacao(person.name,"Actor");
 	        	int partID = participacao.getID();
 	        	for(int i = 0; i<participacoes.size(); i++) {
 	        		if(participacoes.get(i).equals(participacao)) {
@@ -261,27 +273,9 @@ public class MovieQueries {
 	        	else 
 	        		found = false;
 	        	
-	        	partGrupo = new ParticipacaoGrupo(partID,"Actor");
-	        	int partGrupoID = partGrupo.getID();
-	        	for(int i = 0; i<partsGrupo.size(); i++) {
-	        		if(partsGrupo.get(i).equals(partGrupo)) {
-	        			ParticipacaoGrupo.participacaoGrupoID--;
-	        			partGrupoID = partsGrupo.get(i).getID();
-	        			found = true;
-	        			break;
-	        		}
-	        	}
-	        	
-	        	if(!found) 
-	        		partsGrupo.add(partGrupo);
-	        	else 
-	        		found = false;
-	        	
-	        	bilheteira = new Bilheteira(partGrupoID, orcamento, receitas);
-	        	
-	        	if(!bilheteiras.contains(bilheteira))
-	        		bilheteiras.add(bilheteira);
-	        	
+	        	partGrupo = new ParticipacaoGrupo(participacaogrupo_id, partID);
+	        	partsGrupo.add(partGrupo);
+	        
 	        	acumulado = new AcumuladoProfissional(anoID, person.name, orcamento, receitas);
             	for(int i = 0; i<acumulados.size(); i++) {
             		if(acumulados.get(i).equals(acumulado)) {
@@ -294,14 +288,13 @@ public class MovieQueries {
             	if(!found) 
             		acumulados.add(acumulado);
             	else 
-            		found = false;
-	        	
+            		found = false;	        	
 	        }
 	        
 	        crewList = credits.crew;
 	        
 	        for(CrewMember person : crewList) {	        	
-	        	participacao = new Participacao(person.name);
+	        	participacao = new Participacao(person.name,person.job);
 	        	int partID = participacao.getID();
 	        	for(int i = 0; i<participacoes.size(); i++) {
 	        		if(participacoes.get(i).equals(participacao)) {
@@ -317,27 +310,9 @@ public class MovieQueries {
 	        	else 
 	        		found = false;
 	        	
-	        	partGrupo = new ParticipacaoGrupo(partID,person.job);
-	        	int partGrupoID = partGrupo.getID();
-	        	for(int i = 0; i<partsGrupo.size(); i++) {
-	        		if(partsGrupo.get(i).equals(partGrupo)) {
-	        			ParticipacaoGrupo.participacaoGrupoID--;
-	        			partGrupoID = partsGrupo.get(i).getID();
-	        			found = true;
-	        			break;
-	        		}
-	        	}
-	        	
-	        	if(!found) 
-	        		partsGrupo.add(partGrupo);
-	        	else 
-	        		found = false;
-	        	
-	        	bilheteira = new Bilheteira(partGrupoID, orcamento, receitas);
-	        	
-	        	if(!bilheteiras.contains(bilheteira))
-	        		bilheteiras.add(bilheteira);
-	        	
+	        	partGrupo = new ParticipacaoGrupo(participacaogrupo_id,partID);
+        		partsGrupo.add(partGrupo);
+
 	        	acumulado = new AcumuladoProfissional(anoID, person.name, orcamento, receitas);
             	for(int i = 0; i<acumulados.size(); i++) {
             		if(acumulados.get(i).equals(acumulado)) {
@@ -436,9 +411,15 @@ public class MovieQueries {
 		        		found = false;
 		        }
 	        }
-	
+        	bilheteira = new Bilheteira(participacaogrupo_id, orcamento, receitas);
+        	
+        	bilheteiras.add(bilheteira);
+    		participacaogrupo_id++;
 	        Thread.sleep(500);
 		}
+		
+		
+
 	}
 
 	private static void getDataFromTMDBApi() throws IOException, InterruptedException {
